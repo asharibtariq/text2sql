@@ -4,7 +4,7 @@ A natural language to SQL interface with hallucination detection and safety guar
 
 ## Tech Stack
 - Python, SQLAlchemy, PostgreSQL
-- Grok (OPEN AI) for SQL generation
+- Groq (OPEN AI) for SQL generation
 - FastAPI (coming in Phase 2)
 - React frontend (coming in Phase 3)
 

@@ -1,12 +1,14 @@
-import anthropic
+from openai import OpenAI
 from core.extractor import extract_schema, schema_to_text, TableInfo
-from typing import List
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1"
+)
 
 FEW_SHOT_EXAMPLES = [
     {
@@ -34,7 +36,7 @@ LIMIT 3;"""
 ]
 
 
-def filter_relevant_tables(question: str, all_tables: List[TableInfo]) -> List[TableInfo]:
+def filter_relevant_tables(question: str, all_tables: list[TableInfo]) -> list[TableInfo]:
     question_lower = question.lower()
     keywords = {
         "customers": ["customer", "user", "buyer", "country"],
@@ -67,7 +69,7 @@ def build_system_prompt(question: str) -> str:
         for ex in FEW_SHOT_EXAMPLES
     )
 
-    system_prompt = f"""You are an expert SQL assistant. Convert natural language questions into PostgreSQL queries.
+    return f"""You are an expert SQL assistant. Convert natural language questions into PostgreSQL queries.
 
 DATABASE SCHEMA:
 {schema_text}
@@ -83,18 +85,17 @@ RULES:
 EXAMPLES:
 {examples_text}"""
 
-    return system_prompt
-
 
 def generate_sql(question: str) -> str:
     system_prompt = build_system_prompt(question)
 
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=500,
-        system=system_prompt,
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
         messages=[
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Question: {question}"}
-        ]
+        ],
+        temperature=0,
+        max_tokens=500,
     )
-    return response.content[0].text.strip()
+    return response.choices[0].message.content.strip()

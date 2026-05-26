@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, inspect, text
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import Optional
 import os
 from dotenv import load_dotenv
 
@@ -19,10 +19,11 @@ class ColumnInfo:
 @dataclass
 class TableInfo:
     name: str
-    columns: List[ColumnInfo]
+    columns: list[ColumnInfo]
     row_count: int = 0
 
-def extract_schema(table_names: List[str] = None) -> List[TableInfo]:
+
+def extract_schema(table_names: list[str] = None) -> list[TableInfo]:
     engine = create_engine(os.getenv("DATABASE_URL"))
     inspector = inspect(engine)
 
@@ -79,7 +80,7 @@ def extract_schema(table_names: List[str] = None) -> List[TableInfo]:
     return schema
 
 
-def schema_to_text(tables: List[TableInfo]) -> str:
+def schema_to_text(tables: list[TableInfo]) -> str:
     lines = []
     for table in tables:
         lines.append(f"Table: {table.name} ({table.row_count} rows)")

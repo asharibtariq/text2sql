@@ -34,50 +34,6 @@ Confidence: **high** · Alignment: **75%** · 4 rows returned
 
 ---
 
-## Architecture
-User question
-│
-▼
-┌─────────────────────┐
-│  Prompt constructor  │  Schema-aware, few-shot, filtered to relevant tables
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│     LLM (Groq)      │  Llama 3.3 70B, temperature=0
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│  Danger blocker     │  Blocks DROP, DELETE, UPDATE, INSERT, ALTER, TRUNCATE
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│  Schema validator   │  Checks all identifiers exist in the real schema
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│  SQL executor       │  Read-only DB user, LIMIT enforced, sqlparse validated
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│  Hallucination      │  Back-translation alignment + result sanity checks
-│  detection          │
-└─────────────────────┘
-│
-▼
-┌─────────────────────┐
-│  Confidence scorer  │  Aggregates all signals → high / medium / low
-└─────────────────────┘
-│
-▼
-Result + confidence breakdown returned to user
-
----
-
 ## How each layer works
 
 ### 1. Schema-aware prompt engine
@@ -150,33 +106,6 @@ By category:
 
 ---
 
-## Project structure
-text2sql/
-├── api/
-│   ├── init.py
-│   └── main.py              # FastAPI: /query, /schema, /history
-├── core/
-│   ├── init.py
-│   ├── extractor.py         # SQLAlchemy schema introspection
-│   ├── prompt.py            # Dynamic prompt constructor (Groq)
-│   ├── guardrails.py        # Safety layer, validator, executor
-│   └── hallucination.py     # Back-translation + confidence scoring
-├── db/
-│   ├── init.py
-│   ├── schema.py            # SQLAlchemy models
-│   └── seed.py              # Sample e-commerce data seeder
-├── evals/
-│   ├── init.py
-│   ├── golden_dataset.py    # 40 labeled test cases
-│   └── runner.py            # Eval runner + summary report
-├── text2sql-ui/             # React + Vite frontend
-│   └── src/
-│       └── App.jsx
-├── .env.example
-├── requirements.txt
-└── README.md
-
----
 
 ## Setup
 
@@ -190,7 +119,7 @@ text2sql/
 
 ```bash
 git clone https://github.com/asharibtariq/text2sql.git
-cd text-to-sql
+cd text2sql
 ```
 
 ### 2. Install Python dependencies

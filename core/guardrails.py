@@ -4,6 +4,7 @@ from core.extractor import extract_schema
 from dataclasses import dataclass
 from typing import Optional
 import os
+import sqlparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,6 +33,23 @@ def check_dangerous(sql: str) -> Optional[str]:
         if re.search(pattern, sql_upper):
             return f"Blocked: query contains '{keyword}' which is not allowed."
     return None
+
+def check_syntax(sql: str) -> Optional[str]:
+    """Validate SQL syntax using sqlparse."""
+    try:
+        parsed = sqlparse.parse(sql)
+        if not parsed or not parsed[0].tokens:
+            return "SQL appears to be empty or unparseable."
+        
+        # Check it's a SELECT statement
+        statement = parsed[0]
+        stmt_type = statement.get_type()
+        if stmt_type and stmt_type.upper() != "SELECT":
+            return f"Only SELECT statements are allowed. Got: {stmt_type}"
+        
+        return None
+    except Exception as e:
+        return f"SQL syntax error: {str(e)}"
 
 
 def check_schema(sql: str) -> Optional[str]:
@@ -105,7 +123,8 @@ def score_confidence(sql: str, schema_warning: Optional[str]) -> str:
 
 
 def execute_sql(sql: str) -> tuple:
-    engine = create_engine(os.getenv("DATABASE_URL"))
+    readonly_url = os.getenv("DATABASE_READONLY_URL") or os.getenv("DATABASE_URL")
+    engine = create_engine(readonly_url)
     with engine.connect() as conn:
         result = conn.execute(text(sql))
         columns = list(result.keys())
@@ -119,6 +138,10 @@ def validate_and_run(sql: str) -> ValidationResult:
     danger = check_dangerous(sql)
     if danger:
         return ValidationResult(is_valid=False, sql=sql, error=danger)
+
+    syntax_error = check_syntax(sql)
+    if syntax_error:
+        return ValidationResult(is_valid=False, sql=sql, error=syntax_error)
 
     schema_warning = check_schema(sql)
     confidence = score_confidence(sql, schema_warning)

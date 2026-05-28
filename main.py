@@ -3,7 +3,7 @@ from core.guardrails import validate_and_run
 from core.hallucination import analyze
 
 test_cases = [
-    "Show me all customers from Pakistan",
+    "Show me all customers from Canada",
     "What is the total revenue per category?",
     "Which products have less than 100 units in stock?",
     "DROP TABLE customers",

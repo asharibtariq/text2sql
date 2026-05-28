@@ -13,10 +13,10 @@ def seed():
     with Session(engine) as session:
         # Customers
         customers = [
-            Customer(name="Alice Khan", email="alice@example.com", country="Pakistan"),
+            Customer(name="Alice Khan", email="alice@example.com", country="Canada"),
             Customer(name="Bob Smith", email="bob@example.com", country="USA"),
             Customer(name="Sara Lee", email="sara@example.com", country="UK"),
-            Customer(name="Omar Farooq", email="omar@example.com", country="Pakistan"),
+            Customer(name="Omar Farooq", email="omar@example.com", country="Canada"),
             Customer(name="Emily Chen", email="emily@example.com", country="Canada"),
         ]
         session.add_all(customers)

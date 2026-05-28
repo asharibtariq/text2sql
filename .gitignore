@@ -8,4 +8,6 @@ venv/
 .vscode/
 .idea/
 .DS_Store
-Thumbs.db   
+Thumbs.db 
+text2sql-ui/node_modules/
+text2sql-ui/dist/

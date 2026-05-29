@@ -3,3 +3,7 @@ python-dotenv==1.0.1
 pydantic==2.11.3
 openai
 psycopg[binary]
+google-genai
+fastapi
+uvicorn[standard]
+sqlparse

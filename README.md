@@ -2,7 +2,7 @@
 
 > Plain English questions. Safe SQL execution. Hallucination detection built in.
 
-**71% execution accuracy · 100% dangerous query block rate · 82% high-confidence responses · 40 test cases**
+**76% execution accuracy · 100% dangerous query block rate · 82% high-confidence responses · 55 test cases**
 
 ---
 
@@ -87,12 +87,12 @@ Evaluated across 40 test cases covering 5 categories.
 
 | Metric | Result |
 |---|---|
-| Execution success rate | 100% (34/34 safe queries) |
-| Full accuracy rate | 71% (24/34) |
+| Execution success rate | 100% (49/49 safe queries) |
+| Full accuracy rate | 76% (37/49) |
 | Guardrail block rate | 100% (6/6 dangerous queries) |
 | High confidence rate | 82% |
-| Avg alignment score | 0.70 |
-| Avg response time | ~2.1s |
+| Avg alignment score | 0.69 |
+| Avg response time | ~2.5s |
 
 By category:
 
@@ -100,8 +100,8 @@ By category:
 |---|---|---|
 | Simple lookups | 88% | Strong on direct filters |
 | Aggregations | 86% | Good GROUP BY and COUNT handling |
-| Multi-table JOINs | 57% | Complex joins sometimes miss expected columns |
-| Date filters | 67% | Interval syntax mostly correct |
+| Multi-table JOINs | 75% | Complex joins sometimes miss expected columns |
+| Date filters | 71% | Interval syntax mostly correct |
 | Edge cases | 67% | Subqueries and percentage calculations vary |
 
 ---
@@ -183,6 +183,49 @@ Frontend runs at http://localhost:5173
 
 ```bash
 py -3.11 -m evals.runner
+```
+
+---
+
+### . Start everything with docker
+
+```bash
+docker-compose up --build
+```
+
+This starts PostgreSQL, seeds the database, starts the FastAPI backend, and starts the React frontend — all in order.
+
+Open http://localhost:5173
+
+### . Set up the read-only database user
+
+On first run, open a second terminal and run:
+
+```bash
+docker exec -it text2sql_db psql -U postgres -d text2sql
+```
+
+Then:
+
+```sql
+CREATE USER text2sql_readonly WITH PASSWORD 'readonly123';
+GRANT CONNECT ON DATABASE text2sql TO text2sql_readonly;
+GRANT USAGE ON SCHEMA public TO text2sql_readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO text2sql_readonly;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO text2sql_readonly;
+\q
+```
+
+### . Stop
+
+```bash
+docker-compose down
+```
+
+To also wipe the database volume:
+
+```bash
+docker-compose down -v
 ```
 
 ---

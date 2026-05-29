@@ -11,6 +11,10 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 def seed():
     Base.metadata.create_all(engine)
     with Session(engine) as session:
+        existing = session.query(Customer).first()
+        if existing:
+            print("Database already seeded, skipping.")
+            return
         # Customers
         customers = [
             Customer(name="Alice Khan", email="alice@example.com", country="Canada"),

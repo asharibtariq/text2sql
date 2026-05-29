@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import axios from "axios"
 
-const API = "http://localhost:8000"
+const API = "/api"
 
 const SUGGESTIONS = [
   "Show me all customers from Canada",
@@ -277,7 +277,7 @@ export default function App() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#060b12", fontFamily: "system-ui, -apple-system, sans-serif", color: "#e2e8f0" }}>
+    <div style={{ minHeight: "100vh", background: "#060b12", fontFamily: "system-ui, -apple-system, sans-serif", color: "#e2e8f0", display: "flex", flexDirection: "column" }}>
       <style>{`
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
@@ -299,10 +299,11 @@ export default function App() {
       </div>
 
       {/* Content */}
-      <div style={{ position: "relative", zIndex: 1 }}>
+      <div style={{position: "relative", zIndex: 1, flex: 1, display: "flex", flexDirection: "column"  }}>
 
         {/* Nav */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 40px", borderBottom: "0.5px solid #0f1a24" }}>
+        {/* Nav */}
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 40px", borderBottom: "0.5px solid #0f1a24", background: "rgba(6,11,18,0.85)", backdropFilter: "blur(12px)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 28, height: 28, borderRadius: 6, background: "#185FA5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 600, color: "#fff" }}>Q</div>
             <span style={{ fontSize: 15, fontWeight: 500, color: "#e2e8f0" }}>QueryAI</span>
@@ -314,7 +315,7 @@ export default function App() {
         </div>
 
         {/* Hero */}
-        <div style={{ textAlign: "center", padding: "100px 24px 80px" }}>
+        <div style={{ textAlign: "center", padding: "140px 24px 80px" }}>
           <div style={{ display: "inline-block", background: "rgba(24,95,165,0.1)", border: "0.5px solid rgba(55,138,221,0.25)", borderRadius: 20, padding: "6px 16px", fontSize: 12, color: "#378ADD", marginBottom: 24, letterSpacing: "0.04em" }}>
             Natural language → SQL
           </div>
@@ -460,6 +461,29 @@ export default function App() {
           </div>
         )}
       </div>
+      {/* Footer */}
+        {/* Footer */}
+<div style={{ marginTop: "auto", borderTop: "0.5px solid #0f1a24", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+  <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+    <span style={{ fontSize: 12, color: "#334155" }}>76% accuracy</span>
+    <span style={{ fontSize: 12, color: "#334155" }}>100% guardrail block rate</span>
+    <span style={{ fontSize: 12, color: "#334155" }}>82% high confidence</span>
+    <span style={{ fontSize: 12, color: "#334155" }}>55 test cases</span>
+  </div>
+  <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+    <a href="https://www.linkedin.com/in/asharib-tariq/" target="_blank" rel="noreferrer"
+      style={{ fontSize: 12, color: "#334155", textDecoration: "none" }}
+      onMouseEnter={e => e.target.style.color = "#378ADD"}
+      onMouseLeave={e => e.target.style.color = "#334155"}
+    >LinkedIn</a>
+    <a href="https://github.com/asharibtariq/text-to-sql" target="_blank" rel="noreferrer"
+      style={{ fontSize: 12, color: "#334155", textDecoration: "none" }}
+      onMouseEnter={e => e.target.style.color = "#378ADD"}
+      onMouseLeave={e => e.target.style.color = "#334155"}
+    >GitHub</a>
+    <span style={{ fontSize: 12, color: "#1e3a5f" }}>Built by Asharib Tariq</span>
+  </div>
+</div>
     </div>
   )
 }

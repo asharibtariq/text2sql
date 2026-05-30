@@ -108,12 +108,6 @@ By category:
 
 ---
 
-### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- PostgreSQL 14+
-- Groq API key (free at https://console.groq.com)
-
 ### Start everything with docker
 
 ### Clone the repo
@@ -156,6 +150,11 @@ docker-compose down -v
 
 ## Setup Manually
 
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL 14+
+- Groq API key (free at https://console.groq.com)
 
 ### 1. Clone the repo
 

@@ -108,7 +108,7 @@ By category:
 
 ---
 
-### Start everything with docker
+### Quick start
 
 ### Clone the repo
 
@@ -123,7 +123,7 @@ cp .env.example .env
 ```
 Replace with your values
 
-### Start docker
+### Start everything with docker
 
 ```bash
 docker-compose up --build

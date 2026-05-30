@@ -114,14 +114,21 @@ By category:
 - PostgreSQL 14+
 - Groq API key (free at https://console.groq.com)
 
+### Start everything with docker
+
 ### Clone the repo
 
 ```bash
 git clone https://github.com/asharibtariq/text2sql.git
 cd text2sql
 ```
+### Configure .env
 
-### Start everything with docker
+```bash
+cp .env.example .env
+```
+
+### Start docker
 
 ```bash
 docker-compose up --build

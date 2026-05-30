@@ -1,4 +1,4 @@
-# QueryAI — Text-to-SQL with Guardrails
+# QueryAI - Text-to-SQL with Guardrails
 
 > Plain English questions. Safe SQL execution. Hallucination detection built in.
 
@@ -108,14 +108,57 @@ By category:
 
 ---
 
-
-## Setup
-
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
 - PostgreSQL 14+
 - Groq API key (free at https://console.groq.com)
+
+### Start everything with docker
+
+```bash
+docker-compose up --build
+```
+
+This starts PostgreSQL, seeds the database, starts the FastAPI backend, and starts the React frontend — all in order.
+
+Open http://localhost:5173
+
+### Set up the read-only database user
+
+On first run, open a second terminal and run:
+
+```bash
+docker exec -it text2sql_db psql -U postgres -d text2sql
+```
+
+Then:
+
+```sql
+CREATE USER text2sql_readonly WITH PASSWORD 'readonly123';
+GRANT CONNECT ON DATABASE text2sql TO text2sql_readonly;
+GRANT USAGE ON SCHEMA public TO text2sql_readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO text2sql_readonly;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO text2sql_readonly;
+\q
+```
+
+### To Stop the app
+
+```bash
+docker-compose down
+```
+
+To also wipe the database volume:
+
+```bash
+docker-compose down -v
+```
+
+---
+
+## Setup Manually
+
 
 ### 1. Clone the repo
 
@@ -189,49 +232,6 @@ py -3.11 -m evals.runner
 
 ---
 
-### . Start everything with docker
-
-```bash
-docker-compose up --build
-```
-
-This starts PostgreSQL, seeds the database, starts the FastAPI backend, and starts the React frontend — all in order.
-
-Open http://localhost:5173
-
-### . Set up the read-only database user
-
-On first run, open a second terminal and run:
-
-```bash
-docker exec -it text2sql_db psql -U postgres -d text2sql
-```
-
-Then:
-
-```sql
-CREATE USER text2sql_readonly WITH PASSWORD 'readonly123';
-GRANT CONNECT ON DATABASE text2sql TO text2sql_readonly;
-GRANT USAGE ON SCHEMA public TO text2sql_readonly;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO text2sql_readonly;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO text2sql_readonly;
-\q
-```
-
-### . Stop
-
-```bash
-docker-compose down
-```
-
-To also wipe the database volume:
-
-```bash
-docker-compose down -v
-```
-
----
-
 ## API endpoints
 
 | Method | Endpoint | Description |
@@ -240,33 +240,3 @@ docker-compose down -v
 | GET | `/schema` | Return the current database schema |
 | GET | `/history` | Return past queries for the session |
 | GET | `/` | Health check |
-
-### POST /query
-
-Request:
-```json
-{
-  "question": "Show me all customers from Canada"
-}
-```
-
-Response:
-```json
-{
-  "question": "Show me all customers from Canada",
-  "sql": "SELECT c.id, c.name, c.email, c.country FROM customers c WHERE c.country = 'Canada' LIMIT 1000;",
-  "is_valid": true,
-  "columns": ["id", "name", "email", "country", "created_at"],
-  "rows": [[1, "Alice Khan", "alice@example.com", "Canada", "2026-04-27"]],
-  "rows_returned": 3,
-  "back_translation": "This query retrieves customers from Canada.",
-  "alignment_score": 1.0,
-  "confidence": "high",
-  "confidence_breakdown": {
-    "schema_validation": "high",
-    "back_translation_alignment": "pass",
-    "result_sanity": "pass"
-  },
-  "sanity_issues": []
-}
-```

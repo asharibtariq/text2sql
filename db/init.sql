@@ -1,5 +1,3 @@
-CREATE DATABASE text2sql;
-
 \c text2sql;
 
 CREATE USER text2sql_readonly WITH PASSWORD 'readonly123';

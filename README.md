@@ -127,6 +127,7 @@ cd text2sql
 ```bash
 cp .env.example .env
 ```
+Replace with your values
 
 ### Start docker
 
@@ -138,24 +139,6 @@ This starts PostgreSQL, seeds the database, starts the FastAPI backend, and star
 
 Open http://localhost:5173
 
-### Set up the read-only database user
-
-On first run, open a second terminal and run:
-
-```bash
-docker exec -it text2sql_db psql -U postgres -d text2sql
-```
-
-Then:
-
-```sql
-CREATE USER text2sql_readonly WITH PASSWORD 'readonly123';
-GRANT CONNECT ON DATABASE text2sql TO text2sql_readonly;
-GRANT USAGE ON SCHEMA public TO text2sql_readonly;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO text2sql_readonly;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO text2sql_readonly;
-\q
-```
 
 ### To Stop the app
 

@@ -52,9 +52,8 @@ function ParticleCanvas() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    const parent = canvas.parentElement
-    canvas.width = parent.offsetWidth
-    canvas.height = parent.offsetHeight
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
     const ctx = canvas.getContext("2d")
 
     const particles = Array.from({ length: 60 }, () => ({
@@ -67,10 +66,16 @@ function ParticleCanvas() {
     }))
 
     function onMouseMove(e) {
-      const rect = canvas.getBoundingClientRect()
-      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+      mouseRef.current = { x: e.clientX, y: e.clientY }
     }
-    canvas.parentElement.addEventListener("mousemove", onMouseMove)
+
+    function onResize() {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    window.addEventListener("mousemove", onMouseMove)
+    window.addEventListener("resize", onResize)
 
     let raf
     function draw() {
@@ -78,14 +83,13 @@ function ParticleCanvas() {
       const mouse = mouseRef.current
 
       particles.forEach(p => {
-        // Cursor repulsion
         const dx = p.x - mouse.x
         const dy = p.y - mouse.y
         const dist = Math.hypot(dx, dy)
-        if (dist < 100 && dist > 0) {
-          const force = (100 - dist) / 100
-          p.x += (dx / dist) * force * 2
-          p.y += (dy / dist) * force * 2
+        if (dist < 120 && dist > 0) {
+          const force = (120 - dist) / 120
+          p.x += (dx / dist) * force * 3
+          p.y += (dy / dist) * force * 3
         }
 
         ctx.beginPath()
@@ -99,7 +103,6 @@ function ParticleCanvas() {
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1
       })
 
-      // Connect nearby particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y)
@@ -117,27 +120,32 @@ function ParticleCanvas() {
       // Cursor glow ring
       if (mouse.x > 0) {
         ctx.beginPath()
-        ctx.arc(mouse.x, mouse.y, 40, 0, Math.PI * 2)
-        ctx.strokeStyle = "rgba(55,138,221,0.12)"
+        ctx.arc(mouse.x, mouse.y, 50, 0, Math.PI * 2)
+        ctx.strokeStyle = "rgba(55,138,221,0.15)"
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
         ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2)
-        ctx.fillStyle = "rgba(55,138,221,0.3)"
+        ctx.fillStyle = "rgba(55,138,221,0.4)"
         ctx.fill()
       }
 
       raf = requestAnimationFrame(draw)
     }
     draw()
+
     return () => {
       cancelAnimationFrame(raf)
-      canvas.parentElement?.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("resize", onResize)
     }
   }, [])
 
   return (
-    <canvas ref={canvasRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
+    <canvas
+      ref={canvasRef}
+      style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
+    />
   )
 }
 
@@ -481,7 +489,7 @@ export default function App() {
       onMouseEnter={e => e.target.style.color = "#378ADD"}
       onMouseLeave={e => e.target.style.color = "#334155"}
     >GitHub</a>
-    <span style={{ fontSize: 12, color: "#1e3a5f" }}>Built by Asharib Tariq</span>
+    <span style={{ fontSize: 12, color: "#1e3a5f" }}>Built by AT</span>
   </div>
 </div>
     </div>

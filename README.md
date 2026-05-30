@@ -4,6 +4,8 @@
 
 **76% execution accuracy · 100% dangerous query block rate · 82% high-confidence responses · 55 test cases**
 
+> Clone and run in one command with Docker.
+
 ---
 
 ## What is this?

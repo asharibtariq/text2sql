@@ -180,28 +180,13 @@ DATABASE_URL=postgresql+psycopg://postgres:yourpassword@localhost:5432/text2sql
 DATABASE_READONLY_URL=postgresql+psycopg://text2sql_readonly:readonly123@localhost:5432/text2sql
 GROQ_API_KEY=gsk_...
 
-### 4. Set up PostgreSQL
-
-```sql
--- In psql as superuser
-CREATE DATABASE text2sql;
-
-CREATE USER text2sql_readonly WITH PASSWORD 'readonly123';
-GRANT CONNECT ON DATABASE text2sql TO text2sql_readonly;
-
-\c text2sql
-
-GRANT USAGE ON SCHEMA public TO text2sql_readonly;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO text2sql_readonly;
-```
-
-### 5. Seed the database
+### 4. Seed the database
 
 ```bash
 py -3.11 -m db.seed
 ```
 
-### 6. Run the backend
+### 5. Run the backend
 
 ```bash
 py -3.11 -m uvicorn api.main:app --reload
@@ -210,7 +195,7 @@ py -3.11 -m uvicorn api.main:app --reload
 API runs at http://localhost:8000
 Swagger docs at http://localhost:8000/docs
 
-### 7. Run the frontend
+### 6. Run the frontend
 
 ```bash
 cd text2sql-ui
@@ -220,19 +205,8 @@ npm run dev
 
 Frontend runs at http://localhost:5173
 
-### 8. Run the eval suite
+### 7. Run the eval suite
 
 ```bash
 py -3.11 -m evals.runner
 ```
-
----
-
-## API endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/query` | Submit a natural language question |
-| GET | `/schema` | Return the current database schema |
-| GET | `/history` | Return past queries for the session |
-| GET | `/` | Health check |

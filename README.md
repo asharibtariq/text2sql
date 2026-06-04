@@ -90,7 +90,7 @@ Evaluated across 40 test cases covering 5 categories.
 | Metric | Result |
 |---|---|
 | Execution success rate | 100% (49/49 safe queries) |
-| Full accuracy rate | 76% (37/49) |
+| Full accuracy rate | 86% (42/49) |
 | Guardrail block rate | 100% (6/6 dangerous queries) |
 | High confidence rate | 82% |
 | Avg alignment score | 0.69 |

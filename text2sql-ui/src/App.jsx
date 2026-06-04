@@ -473,7 +473,7 @@ export default function App() {
         {/* Footer */}
 <div style={{ marginTop: "auto", borderTop: "0.5px solid #0f1a24", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
   <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-    <span style={{ fontSize: 12, color: "#334155" }}>76% accuracy</span>
+    <span style={{ fontSize: 12, color: "#334155" }}>86% accuracy</span>
     <span style={{ fontSize: 12, color: "#334155" }}>100% guardrail block rate</span>
     <span style={{ fontSize: 12, color: "#334155" }}>82% high confidence</span>
     <span style={{ fontSize: 12, color: "#334155" }}>55 test cases</span>

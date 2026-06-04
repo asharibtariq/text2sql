@@ -2,7 +2,7 @@
 
 > Plain English questions. Safe SQL execution. Hallucination detection built in.
 
-**76% execution accuracy · 100% dangerous query block rate · 82% high-confidence responses · 55 test cases**
+**86% execution accuracy · 100% dangerous query block rate · 82% high-confidence responses · 55 test cases**
 
 > Clone and run in one command with Docker.
 

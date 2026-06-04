@@ -94,7 +94,7 @@ Evaluated across 40 test cases covering 5 categories.
 | Guardrail block rate | 100% (6/6 dangerous queries) |
 | High confidence rate | 82% |
 | Avg alignment score | 0.69 |
-| Avg response time | ~2.5s |
+| Avg response time | ~2s |
 
 By category:
 
